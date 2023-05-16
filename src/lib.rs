@@ -1,4 +1,9 @@
-use std::{ffi::c_char, ptr::NonNull};
+use std::{
+    ffi::{c_char, CStr},
+    ptr::NonNull,
+};
+mod c_str;
+use c_str::COwnedString;
 
 extern "C" {
     fn krcdecode(
@@ -9,29 +14,22 @@ extern "C" {
         src: *mut ::std::os::raw::c_char,
         src_len: ::std::os::raw::c_int,
     ) -> *mut ::std::os::raw::c_char;
-    fn free(_: *const ());
-}
-
-pub struct COwnedString {
-    ptr: NonNull<c_char>,
-}
-
-impl Drop for COwnedString {
-    fn drop(&mut self) {
-        unsafe {
-            free(self.ptr.as_ptr() as _);
-        }
-    }
 }
 
 pub fn krc_decode(resp: &mut [c_char]) -> Option<COwnedString> {
     unsafe {
-        NonNull::new(krcdecode(resp.as_mut_ptr(), resp.len() as _)).map(|ptr| COwnedString { ptr })
+        NonNull::new(krcdecode(resp.as_mut_ptr(), resp.len() as _)).map(|ptr| {
+            let len = CStr::from_ptr(ptr.as_ptr() as _).to_bytes().len() as isize;
+            COwnedString::from_raw_parts(ptr, len)
+        })
     }
 }
 
 pub fn qrc_decode(resp: &mut [c_char]) -> Option<COwnedString> {
     unsafe {
-        NonNull::new(qrcdecode(resp.as_mut_ptr(), resp.len() as _)).map(|ptr| COwnedString { ptr })
+        NonNull::new(qrcdecode(resp.as_mut_ptr(), resp.len() as _)).map(|ptr| {
+            let len = CStr::from_ptr(ptr.as_ptr() as _).to_bytes().len() as isize;
+            COwnedString::from_raw_parts(ptr, len)
+        })
     }
 }
