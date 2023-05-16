@@ -1,7 +1,6 @@
 ﻿#include "LyricDecoder.h"
 #include "zlib/zconf.h"
 #include "zlib/zlib.h"
-#include "stdio.h"
 #include "QQMusicDES/des.h"
 #include <sys/stat.h>
 #include <malloc.h>
@@ -77,13 +76,6 @@ unsigned char* deflate_memory(Bytef* src, unsigned src_len) {
 		return NULL;
 	}
 	dest_len -= strm.avail_out;
-	unsigned char* dest_new = (unsigned char*)realloc(dest, dest_len + 1);
-	if (dest_new)
-		dest = dest_new;
-	else {
-		free(dest);
-		return NULL;
-	}
 	dest[dest_len] = 0;
 	return dest;
 }
