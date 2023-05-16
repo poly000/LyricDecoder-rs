@@ -1,10 +1,10 @@
 fn main() {
     cc::Build::new()
-        .file("src/LyricDecoder/LyricDecoder.c")
-        .file("src/LyricDecoder/QQMusicDES/des.c")
-        .include("src/LyricDecoder")
-        .include("src/LyricDecoder/QQMusicDES")
-        .include("src/LyricDecoder/zlib")
+        .file("LyricDecoder/LyricDecoder.c")
+        .file("LyricDecoder/QQMusicDES/des.c")
+        .include("LyricDecoder")
+        .include("LyricDecoder/QQMusicDES")
+        .include("LyricDecoder/zlib")
         .compile("LyricDecoder");
     println!("cargo:rustc-link-lib=z");
     println!("cargo:rustc-link-lib=LyricDecoder");
