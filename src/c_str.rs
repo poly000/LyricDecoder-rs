@@ -1,10 +1,7 @@
 use std::ops::Index;
 use std::slice;
 use std::{os::raw::c_char, ptr::NonNull};
-
-extern "C" {
-    fn free(_: *const ());
-}
+use libc::free;
 
 /// read-only C owned String
 pub struct COwnedString {

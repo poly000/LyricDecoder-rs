@@ -9,6 +9,7 @@ description = "decoder for KRC/QRC file in C"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+libc = "0.2.144"
 
 [lib]
 name = "lyric_decoder"
